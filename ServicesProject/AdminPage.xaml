@@ -1,0 +1,49 @@
+﻿<Page x:Class="ServicesProject.AdminPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:ServicesProject"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="AdminPage">
+
+    <Grid>
+        <ScrollViewer>
+            <StackPanel>
+                <DataGrid Name="ServicesTable" AutoGenerateColumns="False" HorizontalAlignment="Center" IsReadOnly="True" CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeColumns="False">
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" Initialized="StackPanel_Initialized">
+                                        <StackPanel HorizontalAlignment="Left" Height="100" VerticalAlignment="Center">
+                                            <MediaElement Width="50" Height="50"  Initialized="MediaElement_Initialized"/>
+                                        </StackPanel>
+                                        <StackPanel HorizontalAlignment="Right">
+                                            <StackPanel>
+                                                <TextBlock Initialized="TextBlock_Initialized" HorizontalAlignment="Center" MaxHeight="100px" TextWrapping="Wrap" x:Name="services__title"/>
+                                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                                    <TextBlock Initialized="services__price_Initialized" HorizontalAlignment="Center" MaxHeight="100px" TextWrapping="Wrap" x:Name="services__price"/>
+                                                    <TextBlock Initialized="services__priceWithDiscount_Initialized" HorizontalAlignment="Center" MaxHeight="100px" TextWrapping="Wrap" x:Name="services__priceWithDiscount"/>
+                                                    <TextBlock Initialized="services__time_Initialized" HorizontalAlignment="Center" MaxHeight="100px" TextWrapping="Wrap" x:Name="services__time"/>
+                                                </StackPanel>
+                                                <TextBlock Initialized="services__discount_Initialized" HorizontalAlignment="Center" MaxHeight="100px" TextWrapping="Wrap" x:Name="services__discount"/>
+                                            </StackPanel>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Button Name="btnChange" Content="Редактировать" Initialized="btnChange_Initialized" Click="btnChange_Click" Width="100px" HorizontalAlignment="Center"/>
+                                                <Button Name="btnDel" Content="Удалить" Initialized="btnDel_Initialized" Click="btnDel_Click" Width="100px" HorizontalAlignment="Center"/>
+                                                <Button Name="btnNewZakaz" Content="Новый заказ" Initialized="btnNewZakaz_Initialized" Click="btnNewZakaz_Click" Width="100px" HorizontalAlignment="Center"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </StackPanel>
+        </ScrollViewer>
+
+    </Grid>
+</Page>

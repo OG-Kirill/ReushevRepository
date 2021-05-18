@@ -23,6 +23,9 @@ namespace ServicesProject
         public MainWindow()
         {
             InitializeComponent();
+            BaseClass.Base = new ReyshevEntities();
+            FrameClass.mainFrame = mainFrameXaml;
+            mainFrameXaml.Navigate(new AdminPage());
         }
     }
 }
