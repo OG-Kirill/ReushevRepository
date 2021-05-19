@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -27,6 +28,7 @@ namespace ServicesProject
             ServicesTable.ItemsSource = ServicesList;
         }
         int i = -1;
+        int indexChange;
         private void MediaElement_Initialized(object sender, EventArgs e)
         {
             if (i < ServicesList.Count)
@@ -78,8 +80,17 @@ namespace ServicesProject
         {
             Button btnChange = (Button)sender;
             int ind = Convert.ToInt32(btnChange.Uid);
+            indexChange = Convert.ToInt32(btnChange.Uid);
             Service S = ServicesList[ind];
-            MessageBox.Show(S.Title);
+            Table__stack.Visibility = Visibility.Collapsed;
+            change__stack.Visibility = Visibility.Visible;
+            id__service.Text = Convert.ToString(S.ID);
+            title__service.Text = S.Title;
+            price__service.Text = Convert.ToInt32(S.Cost) + "";
+            timeInSeconds__service.Text = Convert.ToInt32(S.DurationInSeconds) / 60 + "";
+            discount__service.Text = Convert.ToDouble(S.Discount) * 100 + "";
+            pathImg__textBlock.Text = S.MainImagePath;
+
 
         }
         private void btnDel_Click(object sender, RoutedEventArgs e)
@@ -87,7 +98,10 @@ namespace ServicesProject
             Button btnDel = (Button)sender;
             int ind = Convert.ToInt32(btnDel.Uid);
             Service S = ServicesList[ind];
-            MessageBox.Show(S.Title);
+            BaseClass.Base.Service.Remove(S);
+            MessageBox.Show("Запись удалена");
+            BaseClass.Base.SaveChanges();
+            FrameClass.mainFrame.Navigate(new AdminPage());
 
         }
         private void btnNewZakaz_Click(object sender, RoutedEventArgs e)
@@ -160,5 +174,102 @@ namespace ServicesProject
                 }
             }
         }
+
+        private void btn__changeImg_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog OFD = new OpenFileDialog();
+            OFD.ShowDialog();
+            string Path = OFD.FileName;
+            if (Path != "")
+            {
+                int c = Path.IndexOf('У');
+                string length = Path.Substring(c);
+                pathImg__textBlock.Text = length;
+            }                  
+            
+        }
+
+        private void saveChanges_btn_Click(object sender, RoutedEventArgs e)
+        {
+            if (Convert.ToDouble(discount__service.Text) <= 100 && Convert.ToInt32(timeInSeconds__service.Text) * 60 <= 240)
+            {
+                int ind = indexChange;
+                Service S = ServicesList[ind];
+                S.Title = title__service.Text;
+                S.Cost = Convert.ToInt32(price__service.Text);
+                S.DurationInSeconds = Convert.ToInt32(timeInSeconds__service.Text) * 60;
+                S.Discount = Convert.ToDouble(discount__service.Text) / 100;
+                S.MainImagePath = pathImg__textBlock.Text;
+                MessageBox.Show("Изменения сохранены");
+                BaseClass.Base.SaveChanges();
+                FrameClass.mainFrame.Navigate(new AdminPage());
+            }
+            else if (Convert.ToDouble(discount__service.Text) > 100)
+            {
+                MessageBox.Show("Значение скидки не может быть больше, чем 100%");
+            }
+            else if (Convert.ToInt32(timeInSeconds__service.Text) * 60 > 240)
+            {
+                MessageBox.Show("Время услуги не может быть больше, чем 240 минут");
+            }
+
+        }
+
+        private void hidden__stack_Click(object sender, RoutedEventArgs e)
+        {
+            change__stack.Visibility = Visibility.Collapsed;
+            Table__stack.Visibility = Visibility.Visible;
+        }
+
+        private void addNew__service_Click(object sender, RoutedEventArgs e)
+        {
+            Table__stack.Visibility = Visibility.Collapsed;
+            addNew__stack.Visibility = Visibility.Visible;
+        }
+        private void imagePath__add_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog OFD = new OpenFileDialog();
+            OFD.ShowDialog();
+            string Path = OFD.FileName;
+            if (Path != "")
+            {
+                int c = Path.IndexOf('У');
+                string length = Path.Substring(c);
+                imagePath__textBox.Text = length;
+            }
+        }
+        private void addNew__saveBtn_Click(object sender, RoutedEventArgs e)
+        {
+            Service ServiceObject = new Service() {
+                Title = title__add.Text,
+                Cost = Convert.ToInt32(price__add.Text),
+                DurationInSeconds = Convert.ToInt32(time__add.Text) * 60,
+                Discount = Convert.ToDouble(discount__add.Text) / 100,
+                MainImagePath = Convert.ToString(imagePath__textBox.Text)
+            };
+            if (Convert.ToDouble(discount__add.Text) <= 100 && Convert.ToInt32(time__add.Text) <= 240)
+            {
+                BaseClass.Base.Service.Add(ServiceObject);
+                MessageBox.Show("Запись добавлена");
+                BaseClass.Base.SaveChanges();
+                FrameClass.mainFrame.Navigate(new AdminPage());
+            }
+            else if (Convert.ToDouble(discount__add.Text) > 100)
+            {
+                MessageBox.Show("Значение скидки не может быть больше, чем 100%");
+            }
+            else if (Convert.ToInt32(time__add.Text) * 60 > 240)
+            {
+                MessageBox.Show("Время услуги не может быть больше, чем 240 минут");
+            }
+
+        }
+
+        private void addNew__hidden_Click(object sender, RoutedEventArgs e)
+        {
+            addNew__stack.Visibility = Visibility.Collapsed;
+            Table__stack.Visibility = Visibility.Visible;
+        }
+
     }
 }

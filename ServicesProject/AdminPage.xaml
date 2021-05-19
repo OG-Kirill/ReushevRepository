@@ -10,8 +10,27 @@
 
     <Grid>
         <ScrollViewer>
-            <StackPanel>
-                <DataGrid Name="ServicesTable" AutoGenerateColumns="False" HorizontalAlignment="Center" IsReadOnly="True" CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeColumns="False">
+            <StackPanel x:Name="main__stack">
+                <StackPanel x:Name="addNew__stack" Visibility="Collapsed">
+                    <Button x:Name="addNew__hidden" Click="addNew__hidden_Click">Назад</Button>
+                    <TextBlock>Введите название услуги:</TextBlock>
+                    <TextBox x:Name="title__add"></TextBox>
+                    <TextBlock>Введите цену услуги:</TextBlock>
+                    <TextBox x:Name="price__add"></TextBox>
+                    <TextBlock>Введите время услуги (в минутах):</TextBlock>
+                    <TextBox x:Name="time__add"></TextBox>
+                    <TextBlock>Введите скидку в %:</TextBlock>
+                    <TextBox x:Name="discount__add"></TextBox>
+                    <TextBlock>Выберите картинку:</TextBlock>
+                    <Button x:Name="imagePath__add" Click="imagePath__add_Click">Выбрать картинку:</Button>
+                    <TextBox x:Name="imagePath__textBox"></TextBox>
+                    <Button x:Name="addNew__saveBtn" Click="addNew__saveBtn_Click">Добавить запись</Button>
+                </StackPanel>
+                <StackPanel x:Name="Table__stack">
+                    <StackPanel>
+                        <Button x:Name="addNew__service" Click="addNew__service_Click" Width="200px">Новая запись</Button>
+                    </StackPanel>
+                    <DataGrid Name="ServicesTable" AutoGenerateColumns="False" HorizontalAlignment="Center" IsReadOnly="True" CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeColumns="False">
                     <DataGrid.Columns>
                         <DataGridTemplateColumn>
                             <DataGridTemplateColumn.CellTemplate>
@@ -42,6 +61,26 @@
                         </DataGridTemplateColumn>
                     </DataGrid.Columns>
                 </DataGrid>
+            </StackPanel>
+                <StackPanel x:Name="change__stack" Visibility="Collapsed">
+                    <Button x:Name="hidden__stack" Click="hidden__stack_Click">Назад</Button>
+                    <TextBlock>Номер</TextBlock>
+                    <TextBlock x:Name="id__service"></TextBlock>
+                    <TextBlock>Название услуги</TextBlock>
+                    <TextBox x:Name="title__service"></TextBox>
+                    <TextBlock>Цена услуги</TextBlock>
+                    <TextBox x:Name="price__service"></TextBox>
+                    <TextBlock>Время услуги в минутах</TextBlock>
+                    <TextBox x:Name="timeInSeconds__service"></TextBox>
+                    <TextBlock>Скидка в %</TextBlock>
+                    <TextBox x:Name="discount__service"></TextBox>
+                    <StackPanel>
+                        <Button x:Name="btn__changeImg" Click="btn__changeImg_Click">Изменить картинку</Button>
+                        <TextBlock>Путь к картинке</TextBlock>
+                        <TextBox x:Name="pathImg__textBlock"></TextBox>
+                    </StackPanel>
+                    <Button x:Name="saveChanges_btn" Click="saveChanges_btn_Click">Сохранить изменения</Button>
+                </StackPanel>
             </StackPanel>
         </ScrollViewer>
 
