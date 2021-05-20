@@ -4,6 +4,87 @@
              xmlns:local="clr-namespace:ServicesProject"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <ControlTemplate x:Key="Button_Template__AddNew" TargetType="{x:Type Button}">
+            <Border
+                    BorderThickness="1"
+                    CornerRadius="5"
+                    TextBlock.FontSize="15"
+                    TextBlock.TextAlignment="Center"
+                    TextBlock.Foreground="#fff"
+                    Margin="0 0 0 0"
+                    Width="150"
+                    Height="40"
+                    Padding="5"
+                    Name="myBorder"
+                    Background="#04a0ff">
+
+                <ContentPresenter RecognizesAccessKey="True" Margin="{TemplateBinding Padding}"
+                    VerticalAlignment="Center" HorizontalAlignment="Center">
+                </ContentPresenter>
+
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter TargetName="myBorder" Property="Background">
+                        <Setter.Value>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                <GradientStop Color="#04a0ff	" Offset="0"></GradientStop>
+                                <GradientStop Color="#FF0E98EC" Offset="1"></GradientStop>
+                            </LinearGradientBrush>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter TargetName="myBorder" Property="Cursor" Value="Hand"></Setter>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+        <ControlTemplate x:Key="Button_Template__TableButtons" TargetType="{x:Type Button}">
+            <Border BorderBrush="#04a0ff"
+                    BorderThickness="2"
+                    CornerRadius="5"
+                    TextBlock.FontSize="12"
+                    TextBlock.TextAlignment="Center"
+                    TextBlock.Foreground="#000"
+                    Margin="0 0 0 0"
+                    MinWidth="100"
+                    MaxWidth="130"
+                    Padding="2"
+                    Height="30"
+                    Name="myBorder"
+                    Background="#fff">
+
+                <ContentPresenter RecognizesAccessKey="True" Margin="{TemplateBinding Padding}"
+                    VerticalAlignment="Center" HorizontalAlignment="Center">
+                </ContentPresenter>
+
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter TargetName="myBorder" Property="Background">
+                        <Setter.Value>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                <GradientStop Color="#fff" Offset="0"></GradientStop>
+                                <GradientStop Color="#FFEEE7E7" Offset="1"></GradientStop>
+                            </LinearGradientBrush>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter TargetName="myBorder" Property="Cursor" Value="Hand"></Setter>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+        <Style x:Key="forTextBlocks" TargetType="TextBlock">
+            <Setter Property="TextAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Margin" Value="0 5 0 5"/>
+        </Style>
+        <Style x:Key="forTextBoxes" TargetType="TextBox">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="BorderBrush" Value="#000"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Width" Value="300"/>
+            <Setter Property="MinHeight" Value="30"/>
+            <Setter Property="MaxHeight" Value="60"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+        </Style>
     </Application.Resources>
 </Application>

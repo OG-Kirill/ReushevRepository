@@ -6,53 +6,65 @@
       xmlns:local="clr-namespace:ServicesProject"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="AdminPage">
+      Title="AdminPage" FontFamily="Comic Sans MS">
 
     <Grid>
         <ScrollViewer>
             <StackPanel x:Name="main__stack">
-                <StackPanel x:Name="addNew__stack" Visibility="Collapsed">
-                    <Button x:Name="addNew__hidden" Click="addNew__hidden_Click">Назад</Button>
-                    <TextBlock>Введите название услуги:</TextBlock>
-                    <TextBox x:Name="title__add"></TextBox>
-                    <TextBlock>Введите цену услуги:</TextBlock>
-                    <TextBox x:Name="price__add"></TextBox>
-                    <TextBlock>Введите время услуги (в минутах):</TextBlock>
-                    <TextBox x:Name="time__add"></TextBox>
-                    <TextBlock>Введите скидку в %:</TextBlock>
-                    <TextBox x:Name="discount__add"></TextBox>
-                    <TextBlock>Выберите картинку:</TextBlock>
-                    <Button x:Name="imagePath__add" Click="imagePath__add_Click">Выбрать картинку:</Button>
-                    <TextBox x:Name="imagePath__textBox"></TextBox>
-                    <Button x:Name="addNew__saveBtn" Click="addNew__saveBtn_Click">Добавить запись</Button>
+                <StackPanel x:Name="logo__stack" Margin="0 10 0 10">
+                    <Image Source="/Resources/school_logo.png" Width="50" Height="50"/>
+                </StackPanel>
+                <StackPanel Margin="0 10 0 10">
+                    <Button Template="{Binding Source={StaticResource ResourceKey=Button_Template__AddNew}}" x:Name="addNew__service" Click="addNew__service_Click">Новая запись</Button>
+                </StackPanel>
+                <StackPanel x:Name="addNew__stack" Visibility="Collapsed" Background="#e7fabf">
+                    <Button Template="{Binding Source={StaticResource ResourceKey=Button_Template__TableButtons}}" x:Name="addNew__hidden" Click="addNew__hidden_Click" Margin="0 5 0 5">Назад</Button>
+                    <TextBlock Style="{StaticResource forTextBlocks}">Введите название услуги:</TextBlock>
+                    <TextBox Style="{StaticResource forTextBoxes}" x:Name="title__add"></TextBox>
+                    <TextBlock Style="{StaticResource forTextBlocks}">Введите цену услуги:</TextBlock>
+                    <TextBox Style="{StaticResource forTextBoxes}" x:Name="price__add"></TextBox>
+                    <TextBlock Style="{StaticResource forTextBlocks}">Введите время услуги (в минутах):</TextBlock>
+                    <TextBox Style="{StaticResource forTextBoxes}" x:Name="time__add"></TextBox>
+                    <TextBlock Style="{StaticResource forTextBlocks}">Введите скидку в %:</TextBlock>
+                    <TextBox Style="{StaticResource forTextBoxes}" x:Name="discount__add"></TextBox>
+                    <TextBlock Style="{StaticResource forTextBlocks}">Выберите картинку:</TextBlock>
+                    <Button Template="{Binding Source={StaticResource ResourceKey=Button_Template__TableButtons}}" x:Name="imagePath__add" Click="imagePath__add_Click" Margin="0 5 0 5">Выбрать картинку:</Button>
+                    <TextBox Style="{StaticResource forTextBoxes}" x:Name="imagePath__textBox"></TextBox>
+                    <Button Template="{Binding Source={StaticResource ResourceKey=Button_Template__TableButtons}}" x:Name="addNew__saveBtn" Click="addNew__saveBtn_Click" Margin="0 5 0 5">Добавить запись</Button>
+                </StackPanel>
+                <StackPanel x:Name="addNewZakaz__stack" Visibility="Collapsed">
+                    <Button Template="{Binding Source={StaticResource ResourceKey=Button_Template__TableButtons}}" x:Name="addNewZakaz__hidden" Click="addNewZakaz__hidden_Click" Margin="0 5 0 5">Назад</Button>
+                    <TextBlock Style="{StaticResource forTextBlocks}" x:Name="addNewZakaz__titleService"></TextBlock>
+                    <TextBlock Style="{StaticResource forTextBlocks}" x:Name="addNewZakaz__timeService"></TextBlock>
+                    <ComboBox x:Name="addNewZakaz__peopleList" SelectionChanged="addNewZakaz__peopleList_SelectionChanged"></ComboBox>
+                    <DatePicker x:Name="addNewZakaz__datePicker"></DatePicker>
+                    <TextBox x:Name="addNewZakaz__changeSecondTime" TextChanged="addNewZakaz__changeSecondTime_TextChanged"></TextBox>
+                    <Button Template="{Binding Source={StaticResource ResourceKey=Button_Template__TableButtons}}" x:Name="addNewZakaz__saveBtn" Margin="0 5 0 5" Click="addNewZakaz__saveBtn_Click">Добавить новый заказ</Button>
                 </StackPanel>
                 <StackPanel x:Name="Table__stack">
-                    <StackPanel>
-                        <Button x:Name="addNew__service" Click="addNew__service_Click" Width="200px">Новая запись</Button>
-                    </StackPanel>
-                    <DataGrid Name="ServicesTable" AutoGenerateColumns="False" HorizontalAlignment="Center" IsReadOnly="True" CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeColumns="False">
+                    <DataGrid Name="ServicesTable" AutoGenerateColumns="False" HorizontalAlignment="Center" IsReadOnly="True" CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeColumns="False" ColumnWidth="600">
                     <DataGrid.Columns>
                         <DataGridTemplateColumn>
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal" Initialized="StackPanel_Initialized">
-                                        <StackPanel HorizontalAlignment="Left" Height="100" VerticalAlignment="Center">
-                                            <MediaElement Width="50" Height="50"  Initialized="MediaElement_Initialized"/>
+                                        <StackPanel VerticalAlignment="Center" Margin="5 0 70 0">
+                                            <MediaElement Width="75" Height="75"  Initialized="MediaElement_Initialized"/>
                                         </StackPanel>
-                                        <StackPanel HorizontalAlignment="Right">
-                                            <StackPanel>
-                                                <TextBlock Initialized="TextBlock_Initialized" HorizontalAlignment="Center" MaxHeight="100px" TextWrapping="Wrap" x:Name="services__title"/>
+                                        <StackPanel Width="400" Margin="0 0 0 15">
+                                            <StackPanel HorizontalAlignment="Center">
+                                                <TextBlock Initialized="TextBlock_Initialized" HorizontalAlignment="Center" TextAlignment="Center" MaxHeight="100px" TextWrapping="Wrap" x:Name="services__title"/>
                                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                                     <TextBlock Initialized="services__price_Initialized" HorizontalAlignment="Center" MaxHeight="100px" TextWrapping="Wrap" x:Name="services__price"/>
                                                     <TextBlock Initialized="services__priceWithDiscount_Initialized" HorizontalAlignment="Center" MaxHeight="100px" TextWrapping="Wrap" x:Name="services__priceWithDiscount"/>
                                                     <TextBlock Initialized="services__time_Initialized" HorizontalAlignment="Center" MaxHeight="100px" TextWrapping="Wrap" x:Name="services__time"/>
                                                 </StackPanel>
-                                                <TextBlock Initialized="services__discount_Initialized" HorizontalAlignment="Center" MaxHeight="100px" TextWrapping="Wrap" x:Name="services__discount"/>
+                                                <TextBlock Initialized="services__discount_Initialized" HorizontalAlignment="Center" TextWrapping="Wrap" x:Name="services__discount"/>
                                             </StackPanel>
-                                            <StackPanel Orientation="Horizontal">
-                                                <Button Name="btnChange" Content="Редактировать" Initialized="btnChange_Initialized" Click="btnChange_Click" Width="100px" HorizontalAlignment="Center"/>
-                                                <Button Name="btnDel" Content="Удалить" Initialized="btnDel_Initialized" Click="btnDel_Click" Width="100px" HorizontalAlignment="Center"/>
-                                                <Button Name="btnNewZakaz" Content="Новый заказ" Initialized="btnNewZakaz_Initialized" Click="btnNewZakaz_Click" Width="100px" HorizontalAlignment="Center"/>
+                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 15 0 0">
+                                                    <Button Template="{Binding Source={StaticResource ResourceKey=Button_Template__TableButtons}}" Name="btnChange" Content="Редактировать" Initialized="btnChange_Initialized" Click="btnChange_Click" Width="100px" HorizontalAlignment="Center" Margin="0 0 5 0"/>
+                                                    <Button Template="{Binding Source={StaticResource ResourceKey=Button_Template__TableButtons}}" Name="btnDel" Content="Удалить" Initialized="btnDel_Initialized" Click="btnDel_Click" Width="100px" HorizontalAlignment="Center" Margin="0 0 5 0"/>
+                                                    <Button Template="{Binding Source={StaticResource ResourceKey=Button_Template__TableButtons}}" Name="btnNewZakaz" Content="Новый заказ" Initialized="btnNewZakaz_Initialized" Click="btnNewZakaz_Click" Width="100px" HorizontalAlignment="Center"/>
                                             </StackPanel>
                                         </StackPanel>
                                     </StackPanel>
@@ -62,24 +74,24 @@
                     </DataGrid.Columns>
                 </DataGrid>
             </StackPanel>
-                <StackPanel x:Name="change__stack" Visibility="Collapsed">
-                    <Button x:Name="hidden__stack" Click="hidden__stack_Click">Назад</Button>
-                    <TextBlock>Номер</TextBlock>
-                    <TextBlock x:Name="id__service"></TextBlock>
-                    <TextBlock>Название услуги</TextBlock>
-                    <TextBox x:Name="title__service"></TextBox>
-                    <TextBlock>Цена услуги</TextBlock>
-                    <TextBox x:Name="price__service"></TextBox>
-                    <TextBlock>Время услуги в минутах</TextBlock>
-                    <TextBox x:Name="timeInSeconds__service"></TextBox>
-                    <TextBlock>Скидка в %</TextBlock>
-                    <TextBox x:Name="discount__service"></TextBox>
+                <StackPanel x:Name="change__stack" Visibility="Collapsed" Background="#e7fabf">
+                    <Button Template="{Binding Source={StaticResource ResourceKey=Button_Template__TableButtons}}" x:Name="hidden__stack" Click="hidden__stack_Click" Margin="0 5 0 5">Назад</Button>
+                    <TextBlock Style="{StaticResource forTextBlocks}">Номер</TextBlock>
+                    <TextBlock Style="{StaticResource forTextBlocks}" x:Name="id__service"></TextBlock>
+                    <TextBlock Style="{StaticResource forTextBlocks}">Название услуги</TextBlock>
+                    <TextBox Style="{StaticResource forTextBoxes}" x:Name="title__service"></TextBox>
+                    <TextBlock Style="{StaticResource forTextBlocks}">Цена услуги</TextBlock>
+                    <TextBox Style="{StaticResource forTextBoxes}" x:Name="price__service"></TextBox>
+                    <TextBlock Style="{StaticResource forTextBlocks}">Время услуги в минутах</TextBlock>
+                    <TextBox Style="{StaticResource forTextBoxes}" x:Name="timeInSeconds__service"></TextBox>
+                    <TextBlock Style="{StaticResource forTextBlocks}">Скидка в %</TextBlock>
+                    <TextBox Style="{StaticResource forTextBoxes}" x:Name="discount__service"></TextBox>
                     <StackPanel>
-                        <Button x:Name="btn__changeImg" Click="btn__changeImg_Click">Изменить картинку</Button>
-                        <TextBlock>Путь к картинке</TextBlock>
-                        <TextBox x:Name="pathImg__textBlock"></TextBox>
+                        <Button Template="{Binding Source={StaticResource ResourceKey=Button_Template__TableButtons}}" x:Name="btn__changeImg" Click="btn__changeImg_Click" Margin="0 5 0 5">Изменить картинку</Button>
+                        <TextBlock Style="{StaticResource forTextBlocks}">Путь к картинке</TextBlock>
+                        <TextBox Style="{StaticResource forTextBoxes}" x:Name="pathImg__textBlock"></TextBox>
                     </StackPanel>
-                    <Button x:Name="saveChanges_btn" Click="saveChanges_btn_Click">Сохранить изменения</Button>
+                    <Button Template="{Binding Source={StaticResource ResourceKey=Button_Template__TableButtons}}" x:Name="saveChanges_btn" Click="saveChanges_btn_Click" Margin="0 5 0 5">Сохранить изменения</Button>
                 </StackPanel>
             </StackPanel>
         </ScrollViewer>

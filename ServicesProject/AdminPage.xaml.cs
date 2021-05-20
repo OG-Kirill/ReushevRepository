@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -22,10 +23,14 @@ namespace ServicesProject
     public partial class AdminPage : Page
     {
         List<Service> ServicesList = BaseClass.Base.Service.ToList();
+        List<Client> ClientsList = BaseClass.Base.Client.ToList();
         public AdminPage()
         {
             InitializeComponent();
             ServicesTable.ItemsSource = ServicesList;
+            addNewZakaz__peopleList.ItemsSource = ClientsList;
+            addNewZakaz__peopleList.SelectedValuePath = "ID";
+            addNewZakaz__peopleList.DisplayMemberPath = "People";
         }
         int i = -1;
         int indexChange;
@@ -78,6 +83,7 @@ namespace ServicesProject
 
         private void btnChange_Click(object sender, RoutedEventArgs e)
         {
+            addNew__service.Visibility = Visibility.Collapsed;
             Button btnChange = (Button)sender;
             int ind = Convert.ToInt32(btnChange.Uid);
             indexChange = Convert.ToInt32(btnChange.Uid);
@@ -106,11 +112,16 @@ namespace ServicesProject
         }
         private void btnNewZakaz_Click(object sender, RoutedEventArgs e)
         {
+
             Button btnNewZakaz = (Button)sender;
             int ind = Convert.ToInt32(btnNewZakaz.Uid);
+            indexChange = Convert.ToInt32(btnNewZakaz.Uid);
             Service S = ServicesList[ind];
-            MessageBox.Show(S.Title);
-
+            addNewZakaz__stack.Visibility = Visibility.Visible;
+            Table__stack.Visibility = Visibility.Collapsed;
+            addNew__service.Visibility = Visibility.Collapsed;
+            addNewZakaz__titleService.Text = "Название услуги: " + S.Title;
+            addNewZakaz__timeService.Text = "Время: " + S.DurationInSeconds / 60 + " минут";
         }
 
         private void StackPanel_Initialized(object sender, EventArgs e)
@@ -191,7 +202,7 @@ namespace ServicesProject
 
         private void saveChanges_btn_Click(object sender, RoutedEventArgs e)
         {
-            if (Convert.ToDouble(discount__service.Text) <= 100 && Convert.ToInt32(timeInSeconds__service.Text) * 60 <= 240)
+            if (Convert.ToDouble(discount__service.Text) <= 100 && Convert.ToInt32(timeInSeconds__service.Text) <= 240)
             {
                 int ind = indexChange;
                 Service S = ServicesList[ind];
@@ -217,12 +228,14 @@ namespace ServicesProject
 
         private void hidden__stack_Click(object sender, RoutedEventArgs e)
         {
+            addNew__service.Visibility = Visibility.Visible;
             change__stack.Visibility = Visibility.Collapsed;
             Table__stack.Visibility = Visibility.Visible;
         }
 
         private void addNew__service_Click(object sender, RoutedEventArgs e)
         {
+            addNew__service.Visibility = Visibility.Collapsed;
             Table__stack.Visibility = Visibility.Collapsed;
             addNew__stack.Visibility = Visibility.Visible;
         }
@@ -267,9 +280,79 @@ namespace ServicesProject
 
         private void addNew__hidden_Click(object sender, RoutedEventArgs e)
         {
+            addNew__service.Visibility = Visibility.Visible;
             addNew__stack.Visibility = Visibility.Collapsed;
             Table__stack.Visibility = Visibility.Visible;
         }
 
+        private void addNewZakaz__hidden_Click(object sender, RoutedEventArgs e)
+        {
+            addNewZakaz__stack.Visibility = Visibility.Collapsed;
+            Table__stack.Visibility = Visibility.Visible;
+            addNew__service.Visibility = Visibility.Visible;
+        }
+
+        private void addNewZakaz__peopleList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            int index = addNewZakaz__peopleList.SelectedIndex + 1;
+        }
+        DateTime DT;
+        private void addNewZakaz__changeSecondTime_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            try
+            {
+                Regex r1 = new Regex("[0-1][0-9]:[0-5][0-9]");
+                Regex r2 = new Regex("2[0-3]:[0-5][0-9]");
+                if((r1.IsMatch(addNewZakaz__changeSecondTime.Text) || r2.IsMatch(addNewZakaz__changeSecondTime.Text)) && addNewZakaz__changeSecondTime.Text.Length == 5)
+                {
+                    MessageBox.Show(addNewZakaz__changeSecondTime.Text);
+                    TimeSpan TS = TimeSpan.Parse(addNewZakaz__changeSecondTime.Text);
+                    DT = Convert.ToDateTime(addNewZakaz__datePicker.SelectedDate);
+                    DT = DT.Add(TS);
+                    if(DT > DateTime.Now)
+                    {
+                        MessageBox.Show(DT + "");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Слишком поздно");
+                        addNewZakaz__saveBtn.IsEnabled = false;
+                    }
+                }
+                else
+                {
+                    if (addNewZakaz__changeSecondTime.Text.Length > 5)
+                    {
+                        MessageBox.Show("Время указано неверно");
+                        addNewZakaz__saveBtn.IsEnabled = false;
+                    }
+                }
+            }
+            catch
+            {
+                MessageBox.Show("Что-то пошло не так");
+            }
+        }
+
+        private void addNewZakaz__saveBtn_Click(object sender, RoutedEventArgs e)
+        {
+            int ind = indexChange;
+            Service S = ServicesList[ind];
+            int client = addNewZakaz__peopleList.SelectedIndex + 1;
+            
+            ClientService ClientServiceObject = new ClientService()
+            {
+                ClientID = client,
+                ServiceID = S.ID,
+                StartTime = DT,
+            };
+
+
+                BaseClass.Base.ClientService.Add(ClientServiceObject);
+                MessageBox.Show("Запись добавлена");
+                BaseClass.Base.SaveChanges();
+                FrameClass.mainFrame.Navigate(new AdminPage());
+
+        }
     }
 }
