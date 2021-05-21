@@ -16,6 +16,24 @@
                 </StackPanel>
                 <StackPanel Margin="0 10 0 10">
                     <Button Template="{Binding Source={StaticResource ResourceKey=Button_Template__AddNew}}" x:Name="addNew__service" Click="addNew__service_Click">Новая запись</Button>
+                    <TextBlock Style="{StaticResource forTextBlocks}" x:Name="count__lettersAll" Initialized="count__lettersAll_Initialized"></TextBlock>
+                    <TextBlock Style="{StaticResource forTextBlocks}" x:Name="count__lettersSearch"></TextBlock>
+                </StackPanel>
+                <StackPanel x:Name="FilterAndSort__stack">
+                    <Button Template="{Binding Source={StaticResource ResourceKey=Button_Template__AddNew}}" x:Name="SortPrice__up" Click="SortPrice__up_Click">Cортировка по возрастанию</Button>
+                    <Button Template="{Binding Source={StaticResource ResourceKey=Button_Template__AddNew}}" x:Name="SortPrice__down" Click="SortPrice__down_Click">Cортировка по убыванию</Button>
+                    <Button Template="{Binding Source={StaticResource ResourceKey=Button_Template__AddNew}}" x:Name="SortPrice__all" Click="SortPrice__all_Click">обновить таблицу</Button>
+                    <TextBlock Style="{StaticResource forTextBlocks}">Фильтрация по скидке:</TextBlock>
+                    <ComboBox x:Name="filterDiscountList" SelectionChanged="filterDiscountList_SelectionChanged">
+                        <ComboBoxItem>0-5%</ComboBoxItem>
+                        <ComboBoxItem>5-15%</ComboBoxItem>
+                        <ComboBoxItem>15-30%</ComboBoxItem>
+                        <ComboBoxItem>30-70%</ComboBoxItem>
+                        <ComboBoxItem>70-100%</ComboBoxItem>
+                        <ComboBoxItem>Без фильтрации</ComboBoxItem>
+                    </ComboBox>
+                    <TextBlock Style="{StaticResource forTextBlocks}">Введите название услуги:</TextBlock>
+                    <TextBox Style="{StaticResource forTextBoxes}" x:Name="search__services" TextChanged="search__services_TextChanged"></TextBox>
                 </StackPanel>
                 <StackPanel x:Name="addNew__stack" Visibility="Collapsed" Background="#e7fabf">
                     <Button Template="{Binding Source={StaticResource ResourceKey=Button_Template__TableButtons}}" x:Name="addNew__hidden" Click="addNew__hidden_Click" Margin="0 5 0 5">Назад</Button>

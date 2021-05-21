@@ -22,11 +22,13 @@ namespace ServicesProject
     /// </summary>
     public partial class AdminPage : Page
     {
-        List<Service> ServicesList = BaseClass.Base.Service.ToList();
+        List<Service> ServicesList1 = BaseClass.Base.Service.ToList();
         List<Client> ClientsList = BaseClass.Base.Client.ToList();
+        List<Service> ServicesList = new List<Service>(); // для отрисовки
         public AdminPage()
         {
             InitializeComponent();
+            ServicesList = ServicesList1;
             ServicesTable.ItemsSource = ServicesList;
             addNewZakaz__peopleList.ItemsSource = ClientsList;
             addNewZakaz__peopleList.SelectedValuePath = "ID";
@@ -179,7 +181,7 @@ namespace ServicesProject
             {
                 TextBlock TB = (TextBlock)sender;
                 Service S = ServicesList[i];
-                if(S.Discount != 0)
+                if (S.Discount != 0)
                 {
                     TB.Text = "Скидка " + Convert.ToDouble(S.Discount) * 100 + "%";
                 }
@@ -196,8 +198,8 @@ namespace ServicesProject
                 int c = Path.IndexOf('У');
                 string length = Path.Substring(c);
                 pathImg__textBlock.Text = length;
-            }                  
-            
+            }
+
         }
 
         private void saveChanges_btn_Click(object sender, RoutedEventArgs e)
@@ -253,21 +255,22 @@ namespace ServicesProject
         }
         private void addNew__saveBtn_Click(object sender, RoutedEventArgs e)
         {
-            Service ServiceObject = new Service() {
+            Service ServiceObject = new Service()
+            {
                 Title = title__add.Text,
                 Cost = Convert.ToInt32(price__add.Text),
                 DurationInSeconds = Convert.ToInt32(time__add.Text) * 60,
                 Discount = Convert.ToDouble(discount__add.Text) / 100,
                 MainImagePath = Convert.ToString(imagePath__textBox.Text)
             };
-            if (Convert.ToDouble(discount__add.Text) <= 100 && Convert.ToInt32(time__add.Text) <= 240)
+            if (Convert.ToDouble(discount__add.Text) <= 100 && Convert.ToDouble(discount__add.Text) >= 0 && Convert.ToInt32(time__add.Text) <= 240)
             {
                 BaseClass.Base.Service.Add(ServiceObject);
                 MessageBox.Show("Запись добавлена");
                 BaseClass.Base.SaveChanges();
                 FrameClass.mainFrame.Navigate(new AdminPage());
             }
-            else if (Convert.ToDouble(discount__add.Text) > 100)
+            else if (Convert.ToDouble(discount__add.Text) > 100 || Convert.ToDouble(discount__add.Text) < 0)
             {
                 MessageBox.Show("Значение скидки не может быть больше, чем 100%");
             }
@@ -303,13 +306,13 @@ namespace ServicesProject
             {
                 Regex r1 = new Regex("[0-1][0-9]:[0-5][0-9]");
                 Regex r2 = new Regex("2[0-3]:[0-5][0-9]");
-                if((r1.IsMatch(addNewZakaz__changeSecondTime.Text) || r2.IsMatch(addNewZakaz__changeSecondTime.Text)) && addNewZakaz__changeSecondTime.Text.Length == 5)
+                if ((r1.IsMatch(addNewZakaz__changeSecondTime.Text) || r2.IsMatch(addNewZakaz__changeSecondTime.Text)) && addNewZakaz__changeSecondTime.Text.Length == 5)
                 {
                     MessageBox.Show(addNewZakaz__changeSecondTime.Text);
                     TimeSpan TS = TimeSpan.Parse(addNewZakaz__changeSecondTime.Text);
                     DT = Convert.ToDateTime(addNewZakaz__datePicker.SelectedDate);
                     DT = DT.Add(TS);
-                    if(DT > DateTime.Now)
+                    if (DT > DateTime.Now)
                     {
                         MessageBox.Show(DT + "");
                     }
@@ -339,7 +342,7 @@ namespace ServicesProject
             int ind = indexChange;
             Service S = ServicesList[ind];
             int client = addNewZakaz__peopleList.SelectedIndex + 1;
-            
+
             ClientService ClientServiceObject = new ClientService()
             {
                 ClientID = client,
@@ -348,11 +351,123 @@ namespace ServicesProject
             };
 
 
-                BaseClass.Base.ClientService.Add(ClientServiceObject);
-                MessageBox.Show("Запись добавлена");
-                BaseClass.Base.SaveChanges();
-                FrameClass.mainFrame.Navigate(new AdminPage());
+            BaseClass.Base.ClientService.Add(ClientServiceObject);
+            MessageBox.Show("Запись добавлена");
+            BaseClass.Base.SaveChanges();
+            FrameClass.mainFrame.Navigate(new AdminPage());
 
+        }
+
+        private void SortPrice__up_Click(object sender, RoutedEventArgs e)
+        {
+
+            i = -1;
+            ServicesList.Sort((x, y) => (x.CostWithDiscount).CompareTo(y.CostWithDiscount));
+            ServicesTable.Items.Refresh();
+
+        }
+
+        private void SortPrice__down_Click(object sender, RoutedEventArgs e)
+        {
+            i = -1;
+            ServicesList.Sort((x, y) => x.CostWithDiscount.CompareTo(y.CostWithDiscount));
+            ServicesList.Reverse();
+            ServicesTable.Items.Refresh();
+
+        }
+        List<Service> ServicesListFilter = new List<Service>();
+        private void filterDiscountList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            i = -1;
+
+            switch (filterDiscountList.SelectedIndex)
+            {
+                case 0:
+                    ServicesList = ServicesList1;
+                    ServicesListFilter = ServicesList.Where(x => x.Discount <= 0.05).ToList();
+                    ServicesList = ServicesListFilter;
+                    ServicesTable.ItemsSource = ServicesList;
+                    count__lettersSearch.Text = ("Найдено " + Convert.ToString(ServicesList.Count) + " записей");
+                    break;
+                case 1:
+                    ServicesList = ServicesList1;
+                    ServicesListFilter = ServicesList.Where(x => x.Discount <= 0.15 && x.Discount >= 0.05).ToList();
+                    ServicesList = ServicesListFilter;
+                    ServicesTable.ItemsSource = ServicesList;
+                    count__lettersSearch.Text = ("Найдено " + Convert.ToString(ServicesList.Count) + " записей");
+                    break;
+                case 2:
+                    ServicesList = ServicesList1;
+                    ServicesListFilter = ServicesList.Where(x => x.Discount <= 0.30 && x.Discount >= 0.15).ToList();
+                    ServicesList = ServicesListFilter;
+                    ServicesTable.ItemsSource = ServicesList;
+                    count__lettersSearch.Text = ("Найдено " + Convert.ToString(ServicesList.Count) + " записей");
+                    break;
+                case 3:
+                    ServicesList = ServicesList1;
+                    ServicesListFilter = ServicesList.Where(x => x.Discount <= 0.70 && x.Discount >= 0.30).ToList();
+                    ServicesList = ServicesListFilter;
+                    ServicesTable.ItemsSource = ServicesList;
+                    count__lettersSearch.Text = ("Найдено " + Convert.ToString(ServicesList.Count) + " записей");
+                    break;
+                case 4:
+                    ServicesList = ServicesList1;
+                    ServicesListFilter = ServicesList.Where(x => x.Discount <= 1 && x.Discount >= 0.70).ToList();
+                    ServicesList = ServicesListFilter;
+                    ServicesTable.ItemsSource = ServicesList;
+                    count__lettersSearch.Text = ("Найдено " + Convert.ToString(ServicesList.Count) + " записей");
+                    break;
+                case 5:
+                    ServicesList = ServicesList1;
+                    ServicesTable.ItemsSource = ServicesList;
+                    count__lettersSearch.Text = ("Найдено " + Convert.ToString(ServicesList.Count) + " записей");
+                    break;
+            }
+        }
+
+        private void search__services_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            i = -1;
+
+            for (int i = 0; i < ServicesList.Count; i++)
+            {
+                if (search__services.Text != "")
+                {
+                    List<Service> ServiseListPoisk = new List<Service>();
+                    ServiseListPoisk = ServicesList.Where(x => x.Title.Contains(search__services.Text)).ToList();
+                    ServicesList = ServiseListPoisk;
+                    ServicesTable.ItemsSource = ServicesList;
+                    count__lettersSearch.Text = ("Найдено " + Convert.ToString(ServicesList.Count) + " записей");
+                }
+                else
+                {
+                    if (ServicesListFilter.Count == 0)
+                    {
+                        ServicesList = ServicesList1;
+                        ServicesTable.ItemsSource = ServicesList;
+                        count__lettersSearch.Text = ("Найдено " + Convert.ToString(ServicesList.Count) + " записей");
+                    }
+                    else
+                    {
+                        ServicesList = ServicesListFilter;
+                        ServicesTable.ItemsSource = ServicesList;
+                        count__lettersSearch.Text = ("Найдено " + Convert.ToString(ServicesList.Count) + " записей");
+                    }
+                }
+            }
+        }
+
+        private void count__lettersAll_Initialized(object sender, EventArgs e)
+        {
+            count__lettersAll.Text = ("Всего " + Convert.ToString(ServicesList1.Count) + " записей");
+        }
+
+        private void SortPrice__all_Click(object sender, RoutedEventArgs e)
+        {
+            i = -1;
+            ServicesList = ServicesList1;
+            ServicesTable.ItemsSource = ServicesList;
+            ServicesTable.Items.Refresh();
         }
     }
 }
